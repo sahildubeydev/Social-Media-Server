@@ -23,6 +23,4 @@ module.exports = async (req, res, next) => {
     console.log(e);
     return res.send(error(401, "Invalid access key"));
   }
-
-  next();
 };
