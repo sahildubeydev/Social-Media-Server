@@ -61,7 +61,7 @@ const loginController = async (req, res) => {
     });
 
     return res.send(success(200, { accessToken }));
-  } catch (error) {
+  } catch (e) {
     return res.send(error(500, e.message));
   }
 };
@@ -76,7 +76,7 @@ const refreshAccessTokenController = async (req, res) => {
 
   const refreshToken = cookies.jwt;
 
-  // console.log("refressh", refreshToken);
+  // console.log("refresh", refreshToken);
   try {
     const decoded = jwt.verify(
       refreshToken,
