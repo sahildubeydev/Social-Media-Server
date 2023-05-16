@@ -28,6 +28,7 @@ const followOrUnfollowUserController = async (req, res) => {
       const followerIndex = userToFollow.followers.indexOf(curUser);
       userToFollow.followers.splice(followerIndex, 1);
     } else {
+      // already to following
       userToFollow.followers.push(curUserId);
       curUser.followings.push(userIdToFollow);
     }
@@ -37,7 +38,6 @@ const followOrUnfollowUserController = async (req, res) => {
 
     return res.send(success(200, { user: userToFollow }));
   } catch (e) {
-    console.log(e);
     return res.send(error(500, e.message));
   }
 };
@@ -68,7 +68,6 @@ const getPostsOfFollowing = async (req, res) => {
 
     return res.send(success(200, { ...curUser._doc, suggestions, posts }));
   } catch (error) {
-    console.log(e);
     return res.send(error(500, e.message));
   }
 };
@@ -82,7 +81,6 @@ const getMyPosts = async (req, res) => {
 
     return res.send(success(200, { allUserPosts }));
   } catch (error) {
-    console.log(e);
     return res.send(error(500, e.message));
   }
 };
@@ -100,7 +98,6 @@ const getUserPosts = async (req, res) => {
 
     return res.send(success(200, { allUserPosts }));
   } catch (error) {
-    console.log(e);
     return res.send(error(500, e.message));
   }
 };
@@ -115,7 +112,7 @@ const deleteMyProfile = async (req, res) => {
       owner: curUserId,
     });
 
-    // removed myself from followers' followings
+    // removed myself from followers followings
     curUser.followers.forEach(async (followerId) => {
       const follower = await User.findById(followerId);
       const index = follower.followings.indexOf(curUserId);
@@ -123,7 +120,7 @@ const deleteMyProfile = async (req, res) => {
       await follower.save();
     });
 
-    // remove myself from my followings' followers
+    // remove myself from my followings followers
     curUser.followings.forEach(async (followingId) => {
       const following = await User.findById(followingId);
       const index = following.followers.indexOf(curUserId);
@@ -149,7 +146,6 @@ const deleteMyProfile = async (req, res) => {
 
     return res.send(success(200, "user deleted"));
   } catch (e) {
-    console.log(e);
     return res.send(error(500, e.message));
   }
 };
@@ -166,7 +162,6 @@ const getMyInfo = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   try {
     const { name, bio, userImg } = req.body;
-
     const user = await User.findById(req._id);
 
     if (name) {
@@ -190,7 +185,6 @@ const updateUserProfile = async (req, res) => {
     await user.save();
     return res.send(success(200, { user }));
   } catch (e) {
-    console.log("update profile error", e);
     return res.send(error(500, e.message));
   }
 };

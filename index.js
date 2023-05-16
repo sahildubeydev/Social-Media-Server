@@ -37,6 +37,7 @@ app.use(
   })
 );
 
+// routers
 app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
