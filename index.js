@@ -25,10 +25,8 @@ app.use(express.json({ limit: "10mb" }));
 app.use(morgan("common"));
 app.use(cookieParser());
 
-console.log("server env", process.env.NODE_ENV);
-if (process.env.NODE_ENV === "production") {
-  origin = process.env.CORS_ORIGIN;
-}
+let origin = process.env.CORS_ORIGIN;
+
 app.use(
   cors({
     credentials: true,
